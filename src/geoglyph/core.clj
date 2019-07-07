@@ -20,15 +20,16 @@
       (let [delta (- number pos)
             factor (/ delta dir)
             next-digit (cond
-                         (< 0 factor) "1"
+                         (and (< (* 0.5 move-amount) (Math/abs delta))
+                              (< 0 factor)) "1"
                          :else "0")
             moved (= next-digit "1")]
         (recur (str encoded next-digit)
                (if moved (+ (* dir move-amount) pos) pos)
                (* -1.0 dir)
-               (if moved (* 0.5 move-amount) move-amount))))))
+               (if (= -1.0 dir) (* 0.5 move-amount) move-amount))))))
 
-(let [s (str (encode 32.67 90.0 0.01))]
+(let [s (str (encode 32.19 90 0.001))]
   (println (str "Encoded:  " s))
   (println (str "Num bits: " (count s)))
   (println (str "Hex len:  " (/ (count s) 4)))
