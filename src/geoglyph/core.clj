@@ -30,7 +30,9 @@
          move-amount (* 0.5 max-val)]
     (println (prn-str [number max-val accuracy encoded (bin-stream-to-hex encoded) pos dir move-amount]))
     (if (or (<= 128 (count encoded)) (<= (Math/abs (- pos number)) accuracy))
-      encoded
+      (if (empty? encoded)
+        "00"
+        encoded)
       (let [delta (- number pos)
             factor (/ delta dir)
             next-digit (cond
@@ -43,7 +45,7 @@
                (* -1.0 dir)
                (if (= -1.0 dir) (* 0.5 move-amount) move-amount))))))
 
-(let [s (str (encode 25.77 90 0.01))]
+(let [s (str (encode 45 90 0.01))]
   (println (str "Encoded:  " s))
   (println (str "Num bits: " (count s)))
   (println (str "Hex len:  " (/ (count s) 4)))
